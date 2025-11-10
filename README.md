@@ -15,3 +15,60 @@ This repository contains all outputs from the **Colab1 Full Finetuning** task (C
 
 ### 👤 Author
 Sunny – M.S. Software Engineering, San José State University
+
+
+# 🧠 Colab2 – LoRA Parameter-Efficient Finetuning (SmolLM2-135M)
+
+### 📘 Overview
+This notebook demonstrates parameter-efficient fine-tuning (LoRA) on the same dataset and model (SmolLM2-135M) as Colab1.
+Unlike full finetuning, only a small subset of adapter weights (r=4) are trained, making it suitable for limited hardware such as CPU.
+
+---
+
+### 🧭 LoRA Settings
+| Parameter | Value |
+|------------|--------|
+| `r` | 4 |
+| `lora_alpha` | 16 |
+| `lora_dropout` | 0.1 |
+| `target_modules` | q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj |
+| `device` | CPU (no GPU quota) |
+| `max_steps` | 150 |
+| `batch_size` | 1 |
+| `gradient_accumulation_steps` | 8 |
+| `learning_rate` | 5e-4 |
+
+---
+
+### 🧩 Dataset
+- Same dataset as Colab1 (`/data/chat_train.jsonl`)
+- 5 instruction–response pairs, Alpaca-style format.
+
+---
+
+### 🏋️ Training Summary
+- Runtime: CPU (approx. 10–15 min for 150 steps)
+- Final loss: *<your final loss>*
+- Output directory: `/lora_smolm2_cpu/`
+- Optional merged weights: `/smolm2_lora_merged/`
+
+---
+
+### 💾 Files in This Repo
+- LoRA.ipynb ← main training notebook
+- /data/chat_train.jsonl ← dataset
+- /lora_smolm2_cpu/ ← LoRA adapter weights
+- /smolm2_lora_merged/ ← merged weights (optional)
+- /video/ ← recorded walkthrough (optional)
+- README.md ← this documentation
+
+---
+
+### 🧠 Inference Example
+```python
+from transformers import AutoTokenizer, AutoModelForCausalLM
+tok = AutoTokenizer.from_pretrained("lora_smolm2_cpu", use_fast=True)
+mdl = AutoModelForCausalLM.from_pretrained("lora_smolm2_cpu").to("cpu")
+inp = tok("### Instruction:\nExplain cross-validation in one sentence.\n\n### Response:\n", return_tensors="pt")
+out = mdl.generate(**inp, max_new_tokens=64)
+print(tok.decode(out[0], skip_special_tokens=True))
