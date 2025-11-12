@@ -1,5 +1,5 @@
 # CMPE255-Modern-AI-with-unsloth.ai
-# 🧠 Unsloth Full Finetuning – Colab1 Assignment
+# 🧠 Colab1 - Unsloth Full Finetuning
 
 ### 📘 Overview
 This repository contains all outputs from the **Colab1 Full Finetuning** task (CMPE 255).
@@ -9,12 +9,6 @@ This repository contains all outputs from the **Colab1 Full Finetuning** task (C
 - `/smollm2_fullft_out/` – training logs and output  
 - `/smollm2_fullft_ckpt/` – fine-tuned model checkpoint  
 - `unsloth_fullft_upload.zip` – packed version for download  
-
-### 🎥 YouTube Link
-[▶️ Watch the walkthrough video](https://www.youtube.com/...)  
-
-### 👤 Author
-Sunny – M.S. Software Engineering, San José State University
 
 
 # 🧠 Colab2 – LoRA Parameter-Efficient Finetuning (SmolLM2-135M)
@@ -72,3 +66,34 @@ mdl = AutoModelForCausalLM.from_pretrained("lora_smolm2_cpu").to("cpu")
 inp = tok("### Instruction:\nExplain cross-validation in one sentence.\n\n### Response:\n", return_tensors="pt")
 out = mdl.generate(**inp, max_new_tokens=64)
 print(tok.decode(out[0], skip_special_tokens=True))
+```
+
+---
+
+# 🧠 Colab3 – Reinforcement Learning (DPO + LoRA)
+
+### 📘 Overview
+This notebook demonstrates **reinforcement learning using preference data**
+with the **DPO (Direct Preference Optimization)** method and **LoRA parameter-efficient tuning**.
+It fine-tunes the same base model (**SmolLM2-135M**) and dataset as Colab1 and Colab2,  
+but learns from **preferred vs. rejected** responses instead of only correct answers.
+
+---
+
+### 🧩 Dataset
+| Field | Description |
+|--------|-------------|
+| `prompt` | User input or question |
+| `chosen` | Preferred (better) answer |
+| `rejected` | Non-preferred (worse) answer |
+
+📁 File: `/data/pref_dataset.jsonl`
+
+Example:
+```json
+{
+  "prompt": "Explain cross-validation in one sentence.",
+  "chosen": "Cross-validation splits data into folds to estimate generalization reliably.",
+  "rejected": "Cross-validation makes the model overfit less by training on the test set."
+}
+```
