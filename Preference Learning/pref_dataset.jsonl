@@ -1,0 +1,4 @@
+{"prompt": "Explain cross-validation in one sentence.", "chosen": "Cross-validation splits data into folds to estimate generalization reliably.", "rejected": "Cross-validation makes the model overfit less by training on the test set."}
+{"prompt": "Give a short tip to avoid overfitting.", "chosen": "Use regularization and early stopping, and validate on held-out data.", "rejected": "Always train longer with higher learning rate."}
+{"prompt": "Difference between classification and regression?", "chosen": "Classification predicts discrete labels, while regression predicts continuous values.", "rejected": "Both predict numbers only."}
+{"prompt": "What is overfitting?", "chosen": "When a model memorizes training noise and performs poorly on new data.", "rejected": "When a model trains too fast and accuracy is always zero."}
