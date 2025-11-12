@@ -97,3 +97,77 @@ Example:
   "rejected": "Cross-validation makes the model overfit less by training on the test set."
 }
 ```
+---
+
+# 🧠 Colab4 – Reasoning Reinforcement Learning (GRPO-style + DPO + LoRA)
+
+### 📘 Overview
+This notebook demonstrates a **reasoning-style reinforcement learning** workflow
+using **GRPO (Group Relative Preference Optimization)** principles,
+implemented with **LoRA adapters** and **DPOTrainer** for preference-based fine-tuning.
+
+---
+
+### 🧭 Key Idea
+1. Generate multiple candidate answers per question.
+2. Assign rule-based rewards (correct = 1, wrong = 0).
+3. Pick the highest-reward answer as **preferred** and another as **rejected**.
+4. Train a small model (SmolLM2-135M) to favor the better reasoning chain.
+
+---
+
+### 🧩 Dataset
+- Source file: `/data/grpo_math.jsonl` – contains simple math reasoning questions.
+- Generated preference pairs: `/data/grpo_pref_pairs.jsonl`
+
+Example:
+```json
+{
+  "prompt": "If Anna has 3 apples and buys 2 more, then gives 1 to Bob, how many apples does she have?",
+  "chosen": "She has 4 apples.",
+  "rejected": "She has 2 apples."
+}
+```
+
+---
+
+# 🧠 Colab5 – Continued Pretraining + Export to Ollama
+
+### 📘 Overview
+This notebook demonstrates **continued pretraining** on new text data (unsupervised),
+followed by exporting the fine-tuned **LoRA adapter** for use with **Ollama**.
+
+---
+
+### 🧭 Key Idea
+1. Start from **SmolLM2-135M** base model.  
+2. Continue pretraining on new corpus (`/data/continued_corpus.jsonl`).  
+3. Use **LoRA** for efficient fine-tuning on CPU.  
+4. Export the LoRA adapter to integrate with **Ollama** using the `ADAPTER` directive.
+
+---
+
+### 🧩 Dataset
+- Source file: `/data/continued_corpus.jsonl`  
+- Example corpus line:
+- mola toki suna ~ greet friend gently.
+- suna kala numeri : one two three four five .
+---
+
+### ⚙️ Configuration
+| Parameter | Value |
+|------------|--------|
+| Base Model | SmolLM2-135M-Instruct |
+| Adapter | LoRA |
+| Rank | 4 |
+| Steps | 200 |
+| Max Length | 256 |
+| Batch | 1 |
+| Device | CPU |
+
+---
+
+### 🧠 Summary
+- Runtime: CPU (~10–15 min)
+- Output adapter: `/cpt_lora_smolm2_cpu/`
+- Demonstrates unsupervised language adaptation.
